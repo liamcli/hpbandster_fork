@@ -28,7 +28,9 @@ class SmallCNNWorker(Worker):
     def compute(self, config, budget,config_id, working_directory):
         params = config
         params['batch_size'] = 2**params['batch_size']
+        params['filters'] = int(params['filters']/16) * 16
         arm = self.model.create_arm(working_directory, params=params, default=False)
+        time.sleep(2)
         _, val_acc, test_acc = self.model.run_solver(arm, budget)
         output = {'loss':1-val_acc, 'info':{'val_acc':val_acc, 'test_acc': test_acc}}
         return output
@@ -39,7 +41,7 @@ class SmallCNNWorker(Worker):
         config_space.add_hyperparameter(CSH.UniformFloatHyperparameter('learning_rate', lower=1e-5, upper=10, log=True))
         config_space.add_hyperparameter(CSH.UniformIntegerHyperparameter('batch_size', lower=6, upper=9, log=False))
         config_space.add_hyperparameter(CSH.UniformIntegerHyperparameter('layers', lower=2, upper=4, log=False))
-        config_space.add_hyperparameter(CSH.UniformIntegerHyperparameter('filters', lower=16, upper=64+15, log=False, q=16))
+        config_space.add_hyperparameter(CSH.UniformIntegerHyperparameter('filters', lower=16, upper=64+15, log=False))
         config_space.add_hyperparameter(CSH.UniformFloatHyperparameter('init_std1', lower=1e-4, upper=.1, log=True))
         config_space.add_hyperparameter(CSH.UniformFloatHyperparameter('init_std2', lower=1e-3, upper=1, log=True))
         config_space.add_hyperparameter(CSH.UniformFloatHyperparameter('init_std3', lower=1e-3, upper=1, log=True))

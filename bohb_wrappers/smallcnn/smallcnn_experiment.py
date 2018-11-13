@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 import argparse
 import pickle
@@ -7,6 +7,7 @@ import time
 
 import hpbandster.core.nameserver as hpns
 import hpbandster.core.result as hpres
+from hpbandster.core.result import json_result_logger
 
 from hpbandster.optimizers import BOHB as BOHB
 from smallcnn_worker import SmallCNNWorker
@@ -51,18 +52,20 @@ logging.info(ns_port)
 # Most optimizers are so computationally inexpensive that we can affort to run a
 # worker in parallel to it. Note that this one has to run in the background to
 # not plock!
-w = SmallCNNWorker(args.seed,run_id=args.run_id, host=host, nameserver=ns_host, nameserver_port=ns_port)
-w.run(background=True)
-logging.info(NS.port)
+#w = SmallCNNWorker(args.seed,run_id=args.run_id, host=host, nameserver=ns_host, nameserver_port=ns_port)
+#w.run(background=True)
+#logging.info(NS.port)
 # Run an optimizer
 # We now have to specify the host, and the nameserver information
+res_logger = json_result_logger(args.shared_directory, overwrite=False)
 bohb = BOHB(  configspace = SmallCNNWorker.get_config_space(),
               run_id = args.run_id,
               host=host,
               nameserver=ns_host,
               nameserver_port=ns_port,
               min_budget=args.min_budget, max_budget=args.max_budget,
-              working_directory=args.shared_directory
+              working_directory=args.shared_directory,
+              result_logger=res_logger
            )
 logging.info(bohb.dispatcher.nameserver)
 logging.info(bohb.dispatcher.nameserver_port)
