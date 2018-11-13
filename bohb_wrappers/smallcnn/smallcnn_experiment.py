@@ -1,5 +1,5 @@
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 import argparse
 import pickle
@@ -34,7 +34,7 @@ port= 53466
 
 if args.worker:
     time.sleep(5)       # short artificial delay to make sure the nameserver is already running
-    w = SmallCNNWorker(args.seed,run_id=args.run_id, nameserver=host, nameserver_port=port)
+    w = SmallCNNWorker(args.seed,run_id=args.run_id, host=host)
     w.load_nameserver_credentials(working_directory=args.shared_directory)
     logging.info(w.nameserver)
     logging.info(w.nameserver_port)
@@ -51,7 +51,7 @@ logging.info(ns_port)
 # Most optimizers are so computationally inexpensive that we can affort to run a
 # worker in parallel to it. Note that this one has to run in the background to
 # not plock!
-w = SmallCNNWorker(args.seed,run_id=args.run_id, nameserver=host, nameserver_port=port)
+w = SmallCNNWorker(args.seed,run_id=args.run_id, host=host, nameserver=ns_host, nameserver_port=ns_port)
 w.run(background=True)
 logging.info(NS.port)
 # Run an optimizer
