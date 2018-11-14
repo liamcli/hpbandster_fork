@@ -13,7 +13,7 @@ from hpbandster.core.master import Master
 from hpbandster.optimizers.iterations import SuccessiveHalving
 from hpbandster.optimizers.config_generators.bohb import BOHB as CG_BOHB
 
-class BOHB(Master):
+class BOHB_SHA(Master):
 	def __init__(self, configspace = None,
 					eta=3, min_budget=0.01, max_budget=1,
 					min_points_in_model = None,	top_n_percent=15,

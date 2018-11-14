@@ -14,7 +14,6 @@ sys.path.append('/home/ubuntu')
 sys.path.append('/home/ubuntu/hpOpt')
 sys.path.append('/home/ubuntu/hpOpt/benchmarks')
 from hpbandster.core.worker import Worker
-import caffe
 from hpOpt.benchmarks.smallcnn.smallcnn_architecture_task import smallcnn_architecture
 
 class SmallCNNWorker(Worker):

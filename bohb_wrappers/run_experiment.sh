@@ -7,8 +7,9 @@ export PYTHONPATH=/home/ubuntu/caffe/python:/home/ubuntu/hpOpt
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
 export CUDA_HOME=/usr/local/cuda
 export PATH=$PATH:/usr/local/cuda
+export WORK_DIR=/home/ubuntu/results/bohb/$2/$3/trial$1
 if [ $SGE_TASK_ID -eq 1 ]
-then python smallcnn_experiment.py --run_id $JOB_ID --nic_name eth0 --shared_directory /home/ubuntu/results/bohb/smallcnn/trial$1 --seed $1
+then python run_experiment.py --run_id $JOB_ID --nic_name eth0 --shared_directory $WORK_DIR --seed $1 --method $2 --benchmark $3
 else
-python smallcnn_experiment.py --run_id $JOB_ID --nic_name eth0  --shared_directory /home/ubuntu/results/bohb/smallcnn/trial$1 --worker --seed $1
+python run_experiment.py --run_id $JOB_ID --nic_name eth0  --shared_directory $WORK_DIR --worker --seed $1 --method $2 --benchmark $3
 fi

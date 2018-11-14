@@ -14,7 +14,7 @@ from hpbandster.core.master import Master
 from hpbandster.optimizers.iterations import SuccessiveHalving
 from hpbandster.optimizers.config_generators import RandomSampling
 
-class HyperBand(Master):
+class SHA(Master):
 	def __init__(self, configspace = None,
 					eta=3, min_budget=0.01, max_budget=1,
 					**kwargs ):

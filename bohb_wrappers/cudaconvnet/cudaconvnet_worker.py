@@ -7,10 +7,12 @@ import json
 
 import ConfigSpace as CS
 import ConfigSpace.hyperparameters as CSH
+import logging
 
 import sys
 sys.path.append('/home/ubuntu')
 sys.path.append('/home/ubuntu/hpOpt')
+sys.path.append('/home/ubuntu/hpOpt/benchmarks')
 from hpbandster.core.worker import Worker
 from hpOpt.benchmarks.cudaconvnet.cudaconvnet_benchmark import cudaconvnet18pct
 
@@ -24,11 +26,12 @@ class CudaconvnetWorker(Worker):
     def compute(self, config, budget,config_id, working_directory):
         params = config
         arm = self.model.create_arm(working_directory, params=params, default=False)
+        time.sleep(2)
         _, val_acc, test_acc = self.model.run_solver(arm, budget)
         output = {'loss':1-val_acc, 'info':{'val_acc':val_acc, 'test_acc': test_acc}}
         return output
-
-    def get_config_space(parsed_args):
+    @staticmethod
+    def get_config_space():
         config_space=CS.ConfigurationSpace()
 
         config_space.add_hyperparameter(CSH.UniformFloatHyperparameter('learning_rate', lower=5e-5, upper=5, log=True))
