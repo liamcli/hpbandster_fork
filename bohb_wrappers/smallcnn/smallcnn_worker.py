@@ -23,13 +23,15 @@ class SmallCNNWorker(Worker):
         self.model.set_R(30000)
         self.model.set_device(0)
         logging.info('Worker initialized')
+        save_dir = '/mnt/working'
+        if os.path.isdir(save_dir): 
+            shutil.rmtree(save_dir)
 
     def compute(self, config, budget,config_id, working_directory):
         params = config
         params['batch_size'] = 2**params['batch_size']
         params['filters'] = int(params['filters']/16) * 16
-        arm = self.model.create_arm(working_directory, params=params, default=False)
-        time.sleep(2)
+        arm = self.model.create_arm('/mnt/working', params=params, default=False)
         _, val_acc, test_acc = self.model.run_solver(arm, budget)
         output = {'loss':1-val_acc, 'info':{'val_acc':val_acc, 'test_acc': test_acc}}
         return output
