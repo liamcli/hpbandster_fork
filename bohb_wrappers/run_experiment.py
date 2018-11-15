@@ -5,6 +5,7 @@ import argparse
 import pickle
 import time
 import os, sys
+import numpy as np
 sys.path.append('/home/ubuntu/hpbandster')
 
 import hpbandster.core.nameserver as hpns
@@ -72,6 +73,9 @@ if args.method == 'sha':
     Searcher = SHA
 else:
     Searcher = BOHB
+
+np.random.seed(args.seed)
+
 bohb = Searcher(  configspace = RunWorker.get_config_space(),
               run_id = args.run_id,
               eta=4,
