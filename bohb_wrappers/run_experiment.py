@@ -4,6 +4,8 @@ logging.basicConfig(level=logging.DEBUG)
 import argparse
 import pickle
 import time
+import os, sys
+sys.path.append('/home/ubuntu/hpbandster')
 
 import hpbandster.core.nameserver as hpns
 import hpbandster.core.result as hpres
@@ -21,7 +23,7 @@ parser.add_argument('--min_budget',   type=float, help='Minimum budget used duri
 parser.add_argument('--max_budget',   type=float, help='Maximum budget used during the optimization.',    default=30000)
 parser.add_argument('--benchmark', type=str, help='Which benchmark to run, cudaconvnet or smallcnn.', default='cudaconvnet')
 parser.add_argument('--method',   type=str, help='Hp optimizer to use.',    default='sha')
-parser.add_argument('--n_iterations', type=int,   help='Number of iterations performed by the optimizer', default=8)
+parser.add_argument('--n_iterations', type=int,   help='Number of iterations performed by the optimizer', default=3)
 parser.add_argument('--n_workers', type=int,   help='Number of workers to run in parallel.', default=20)
 parser.add_argument('--worker', help='Flag to turn this into a worker process', action='store_true')
 parser.add_argument('--run_id', type=str, help='A unique run id for this optimization run. An easy option is to use the job id of the clusters scheduler.')
@@ -72,6 +74,7 @@ else:
     Searcher = BOHB
 bohb = Searcher(  configspace = RunWorker.get_config_space(),
               run_id = args.run_id,
+              eta=4,
               host=host,
               nameserver=ns_host,
               nameserver_port=ns_port,
@@ -81,6 +84,7 @@ bohb = Searcher(  configspace = RunWorker.get_config_space(),
            )
 logging.info(bohb.dispatcher.nameserver)
 logging.info(bohb.dispatcher.nameserver_port)
+logging.info('running for %d iterations' % args.n_iterations)
 res = bohb.run(n_iterations=args.n_iterations, min_n_workers=args.n_workers)
 
 

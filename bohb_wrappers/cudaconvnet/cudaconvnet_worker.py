@@ -13,6 +13,7 @@ import sys
 sys.path.append('/home/ubuntu')
 sys.path.append('/home/ubuntu/hpOpt')
 sys.path.append('/home/ubuntu/hpOpt/benchmarks')
+sys.path.append('/home/ubuntu/hpbandster')
 from hpbandster.core.worker import Worker
 from hpOpt.benchmarks.cudaconvnet.cudaconvnet_benchmark import cudaconvnet18pct
 
@@ -25,6 +26,7 @@ class CudaconvnetWorker(Worker):
         save_dir = '/mnt/working'
         if os.path.isdir(save_dir): 
             shutil.rmtree(save_dir)
+        os.makedirs(save_dir)
 
     def compute(self, config, budget,config_id, working_directory):
         params = config
