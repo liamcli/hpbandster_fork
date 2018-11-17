@@ -1,6 +1,4 @@
 import logging
-logging.basicConfig(level=logging.DEBUG)
-
 import argparse
 import pickle
 import time
@@ -34,6 +32,11 @@ parser.add_argument('--seed',type=int, help='random seed for model', default=100
 
 
 args=parser.parse_args()
+
+log_format = '%(asctime)s %(message)s'
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG,
+    format=log_format, datefmt='%m/%d %I:%M:%S %p')
+
 
 # Every process has to lookup the hostname
 host = hpns.nic_name_to_host(args.nic_name)
